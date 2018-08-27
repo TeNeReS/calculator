@@ -8,7 +8,11 @@ public class CalculatorExpression {
 
     private CalculatorOperation operation;
 
-    private double result;
+    private CalculatorExpressionResult result;
+
+    public void calculateExpression() {
+        setResult(new CalculatorExpressionResult(operation.execute()));
+    }
 
     @XmlElement(name="operation")
     public CalculatorOperation getOperation() {
@@ -20,11 +24,11 @@ public class CalculatorExpression {
     }
 
     @XmlTransient
-    public double getResult() {
+    public CalculatorExpressionResult getResult() {
         return result;
     }
 
-    public void setResult(double result) {
+    public void setResult(CalculatorExpressionResult result) {
         this.result = result;
     }
 }

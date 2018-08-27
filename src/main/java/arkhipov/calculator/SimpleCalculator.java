@@ -1,14 +1,26 @@
 package main.java.arkhipov.calculator;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @XmlRootElement
 public class SimpleCalculator {
 
     private List<CalculatorExpression> expressions;
+
+    private List<CalculatorExpressionResult> expressionResults;
+
+    public void calculate() {
+        // Вычисляем выражения
+        expressions.forEach(CalculatorExpression::calculateExpression);
+
+        // Устанавливаем список результатов
+        setExpressionResults(expressions.stream().map(CalculatorExpression::getResult).collect(Collectors.toList()));
+
+        // Обнуляем список выражений, чтобы они не попали в выходной xml (пока нет задачи хранить выражения).
+        setExpressions(null);
+    }
 
     @XmlElementWrapper
     @XmlElement(name="expression")
@@ -20,9 +32,13 @@ public class SimpleCalculator {
         this.expressions = expressions;
     }
 
-    public void calculate() {
-        expressions.forEach(e -> {
-            e.setResult(e.getOperation().execute());
-        });
+    @XmlElementWrapper
+    @XmlElement(name="expressionResult")
+    public List<CalculatorExpressionResult> getExpressionResults() {
+        return expressionResults;
+    }
+
+    public void setExpressionResults(List<CalculatorExpressionResult> expressionResults) {
+        this.expressionResults = expressionResults;
     }
 }

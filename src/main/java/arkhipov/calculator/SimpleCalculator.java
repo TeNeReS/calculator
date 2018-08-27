@@ -19,4 +19,10 @@ public class SimpleCalculator {
     public void setExpressions(List<CalculatorExpression> expressions) {
         this.expressions = expressions;
     }
+
+    public void calculate() {
+        expressions.forEach(e -> {
+            e.setResult(e.getOperation().execute());
+        });
+    }
 }
